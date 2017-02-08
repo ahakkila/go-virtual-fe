@@ -28,6 +28,7 @@ func main() {
   }
   Proxies = make(map[string]*httputil.ReverseProxy)
 
+  mux := http.NewServeMux()
   for siteurl, backendport := range vhosts {
     fmt.Println("Adding backend " + siteurl + " on port " + backendport)
 
@@ -39,9 +40,18 @@ func main() {
     Proxies[siteurl] = proxy
   }
 
-  mux := http.NewServeMux()
-  mux.HandleFunc("/", proxyHandler)
+  mux.HandleFunc("/", func (w http.ResponseWriter, r *http.Request) {
+    fmt.Println("Proxying request: " + r.Host + r.RequestURI)
+    p := Proxies[r.Host]
+    if p != nil {
+      p.ServeHTTP(w, r)
+    } else {
+      http.NotFound(w, r)
+    }
+    return
+  }) 
 
+  fmt.Println("Frontend starting, listening on :80")
   srv := &http.Server{
     Handler: mux,
     Addr: ":80",
