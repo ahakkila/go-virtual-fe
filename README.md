@@ -1,1 +1,2 @@
-# go-virtual-fe
+# Virtual host frontend in Go language
+
