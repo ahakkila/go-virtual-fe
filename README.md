@@ -3,9 +3,7 @@ An example virtual host frontend in Go language proxying requests to defined
 backend servers using httputil.SingleHostReverseProxy
 
 ## Purpose
-I couldn't find anything simple implementing this so I did it just for fun. For some reason matching request hosts with mux.HandleFunc didn't work as I
-expected so I added mapping http.Request.Host to a 
-httputil.SingleHostReverseProxy and got it working.
+I couldn't find anything simple implementing this so I did it just for fun. 
 
 For production use there should be better error handling and if you stumbled 
 here looking for out-of-the-box solution, you'd probably be better off with
